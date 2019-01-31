@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-sm-3" style="background-color:salmon">
+            <h1>{{ request.user }}</h1>
+        </div>
+        <div class="col-sm-9 ">
+            <div>
+                {% include "tweets/form.html" with form=create_form action_url=create_url btn_title="TWEET" %}
+            </div>
+            <hr>
+
+            {% for object in object_list %}
+            <div class="media">
+                <div class="media-left">
+                    {% if object.image %}
+                    <img class="media-object">
+                    {% endif %}
+                </div>
+                <div class="media-body">
+                    {{ object.content }}<br>
+                    via {{ object.user }} | {{ object.timestamp|timesince }} ago | <a href="{{ object.get_absolute_url }}">View</a>
+                </div>
+            </div>
+            <hr>
+            {% empty %}
+                {% if request.GET.q %}
+                <p>No tweets found.</p>
+                {% else %}
+                <p>No tweets yet.</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock content %}
